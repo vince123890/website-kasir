@@ -6,6 +6,7 @@ use App\Http\Controllers\TenantController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -83,6 +84,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/products/bulk-price-update', [ProductController::class, 'bulkPriceUpdate'])->name('products.bulkPriceUpdate');
         Route::get('/products/{id}/price-history', [ProductController::class, 'priceHistory'])->name('products.priceHistory');
         Route::post('/products/{id}/override-price', [ProductController::class, 'overrideStorePrice'])->name('products.overrideStorePrice');
+    });
+
+    // Suppliers Management Routes (Tenant Owner & Admin Toko)
+    Route::middleware('role:Tenant Owner|Admin Toko')->group(function () {
+        Route::get('/suppliers/export', [SupplierController::class, 'export'])->name('suppliers.export');
+        Route::resource('suppliers', SupplierController::class);
+        Route::get('/suppliers/{id}/history', [SupplierController::class, 'purchaseHistory'])->name('suppliers.history');
     });
 });
 

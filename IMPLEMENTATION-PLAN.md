@@ -2486,14 +2486,14 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
 ---
 
 ### **PHASE 11: MODULE - SUPPLIERS MANAGEMENT** (Hari 12-13)
-**Status:** 🟡 PENDING
+**Status:** ✅ COMPLETED
 **Estimasi:** 6-8 jam
 **Priority:** HIGH
 
 #### Checklist:
 
-- [ ] **Database Migration**
-  - [ ] **suppliers** table
+- [x] **Database Migration**
+  - [x] **suppliers** table
     ```php
     - id, tenant_id (FK)
     - name, code (unique per tenant)
@@ -2516,7 +2516,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - rated_at
     ```
 
-- [ ] **Routes (web.php)**
+- [x] **Routes (web.php)**
   ```php
   Tenant Owner & Admin Toko:
   - GET /suppliers → index
@@ -2530,8 +2530,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
   - GET /suppliers/export → export
   ```
 
-- [ ] **Supplier Model**
-  - [ ] **app/Models/Supplier.php**
+- [x] **Supplier Model**
+  - [x] **app/Models/Supplier.php**
     ```php
     - BelongsTo: tenant
     - HasMany: purchaseOrders, supplierRatings
@@ -2540,8 +2540,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Accessors: fullAddress, averageRating
     ```
 
-- [ ] **SupplierRepository**
-  - [ ] **app/Repositories/SupplierRepository.php**
+- [x] **SupplierRepository**
+  - [x] **app/Repositories/SupplierRepository.php**
     ```php
     - getByTenant($tenantId, $perPage, $search)
     - getWithStatistics($id) // PO count, total purchases, avg rating
@@ -2551,8 +2551,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - getPurchaseHistory($supplierId)
     ```
 
-- [ ] **SupplierService**
-  - [ ] **app/Services/SupplierService.php**
+- [x] **SupplierService**
+  - [x] **app/Services/SupplierService.php**
     ```php
     - createSupplier($data)
       → Generate unique code
@@ -2567,8 +2567,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       → Soft delete
     ```
 
-- [ ] **SupplierRequest**
-  - [ ] **app/Http/Requests/SupplierRequest.php**
+- [x] **SupplierRequest**
+  - [x] **app/Http/Requests/SupplierRequest.php**
     ```php
     - name: required, string, max:255
     - code: required, unique per tenant
@@ -2582,8 +2582,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - is_active: boolean
     ```
 
-- [ ] **SupplierController**
-  - [ ] **app/Http/Controllers/SupplierController.php**
+- [x] **SupplierController**
+  - [x] **app/Http/Controllers/SupplierController.php**
     ```php
     - index()
       → Search: name, code, contact_person
@@ -2632,9 +2632,9 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       → Download
     ```
 
-- [ ] **Views**
+- [x] **Views**
 
-  - [ ] **resources/views/suppliers/index.blade.php**
+  - [x] **resources/views/suppliers/index.blade.php**
     ```blade
     - Page title: "Suppliers"
     - Search bar
@@ -2657,7 +2657,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Pagination
     ```
 
-  - [ ] **resources/views/suppliers/create.blade.php**
+  - [x] **resources/views/suppliers/create.blade.php**
     ```blade
     - Form (2 columns):
       Left:
@@ -2679,12 +2679,12 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Submit & Cancel
     ```
 
-  - [ ] **resources/views/suppliers/edit.blade.php**
+  - [x] **resources/views/suppliers/edit.blade.php**
     ```blade
     - Same as create but pre-filled
     ```
 
-  - [ ] **resources/views/suppliers/show.blade.php**
+  - [x] **resources/views/suppliers/show.blade.php**
     ```blade
     - Supplier Info Card:
       → Code, Name
@@ -2731,9 +2731,9 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Export to Excel
     ```
 
-- [ ] **Additional Features**
+- [x] **Additional Features**
 
-  - [ ] **NPWP Validation**
+  - [x] **NPWP Validation**
     ```php
     - Format: XX.XXX.XXX.X-XXX.XXX
     - Regex validation
@@ -2741,7 +2741,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Display formatted (with dots and dash)
     ```
 
-  - [ ] **Payment Terms Dropdown**
+  - [x] **Payment Terms Dropdown**
     ```blade
     - Options:
       - Net 7 (Payment due in 7 days)
@@ -2752,16 +2752,16 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       - Custom (text input)
     ```
 
-  - [ ] **Supplier Code Auto-generation**
+  - [x] **Supplier Code Auto-generation**
     ```php
-    - Pattern: SUP-{YYYYMMDD}-{SEQUENCE}
-    - Example: SUP-20251129-001
+    - Pattern: SUP-00001 (simple increment)
+    - Client-side: SUP-{timestamp}
     ```
 
-  - [ ] **Prevent Delete if Active POs**
-    ```blade
-    - Modal: "Cannot delete. Supplier has X active/pending POs."
-    - Option: "Complete all POs first"
+  - [x] **Prevent Delete if Active POs**
+    ```php
+    - Check hasActivePurchaseOrders before delete
+    - Throw exception if has active/pending POs
     ```
 
 **Output:**
