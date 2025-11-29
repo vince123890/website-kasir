@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TenantController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,6 +28,7 @@ Route::middleware('auth')->group(function () {
 
     // Admin Routes (Super Admin only)
     Route::prefix('admin')->name('admin.')->middleware('role:Administrator SaaS')->group(function () {
+        // Users Management
         Route::resource('users', UserController::class)->names([
             'index' => 'admin.users.index',
             'create' => 'admin.users.create',
@@ -36,6 +38,12 @@ Route::middleware('auth')->group(function () {
             'update' => 'admin.users.update',
             'destroy' => 'admin.users.destroy',
         ]);
+
+        // Tenants Management
+        Route::resource('tenants', TenantController::class);
+        Route::post('/tenants/{id}/restore', [TenantController::class, 'restore'])->name('tenants.restore');
+        Route::post('/tenants/{id}/activate', [TenantController::class, 'activate'])->name('tenants.activate');
+        Route::post('/tenants/{id}/deactivate', [TenantController::class, 'deactivate'])->name('tenants.deactivate');
     });
 
     // Staff Routes (Admin Toko)
