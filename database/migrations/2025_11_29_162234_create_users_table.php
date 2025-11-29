@@ -13,12 +13,31 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('tenant_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('store_id')->nullable()->constrained()->onDelete('set null');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('phone')->nullable();
+            $table->string('avatar_path')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->string('activation_code', 6)->nullable();
+            $table->timestamp('activation_code_expires_at')->nullable();
+            $table->boolean('must_change_password')->default(false);
+            $table->timestamp('password_expires_at')->nullable();
+            $table->timestamp('last_login_at')->nullable();
+            $table->integer('login_count')->default(0);
+            $table->string('last_login_ip')->nullable();
+            $table->string('last_login_device')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->index('tenant_id');
+            $table->index('store_id');
+            $table->index('is_active');
+            $table->index('email');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
