@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -63,6 +64,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('stores', StoreController::class);
         Route::get('/stores/{id}/settings', [StoreController::class, 'settings'])->name('stores.settings');
         Route::put('/stores/{id}/settings', [StoreController::class, 'updateSettings'])->name('stores.updateSettings');
+    });
+
+    // Categories Management Routes (Tenant Owner & Admin Toko)
+    Route::middleware('role:Tenant Owner|Admin Toko')->group(function () {
+        Route::resource('categories', CategoryController::class);
+        Route::post('/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('categories.bulkDelete');
+        Route::get('/categories/export', [CategoryController::class, 'export'])->name('categories.export');
     });
 });
 
