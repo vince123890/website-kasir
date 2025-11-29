@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,13 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    protected UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display the login view.
      */
@@ -28,14 +36,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        // Track login data
+        // Track login data using UserService
         $user = Auth::user();
-        $user->update([
-            'last_login_at' => now(),
-            'last_login_ip' => $request->ip(),
-            'last_login_device' => $request->userAgent(),
-            'login_count' => $user->login_count + 1,
-        ]);
+        $this->userService->trackLogin(
+            $user->id,
+            $request->ip(),
+            $request->userAgent()
+        );
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
