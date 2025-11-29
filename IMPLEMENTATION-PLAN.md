@@ -258,35 +258,35 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
 ---
 
 ### **PHASE 2: MODELS & RELATIONSHIPS** (Hari 3-4)
-**Status:** 🟡 PENDING
+**Status:** ✅ COMPLETED
 **Estimasi:** 6-8 jam
 **Priority:** CRITICAL
 
 #### Checklist:
 
-- [ ] **Base Classes**
-  - [ ] **app/Http/Controllers/Base/BaseController.php**
+- [x] **Base Classes**
+  - [x] **app/Http/Controllers/Base/BaseController.php**
     ```php
     - CRUD methods: index, create, store, show, edit, update, destroy
     - Flash messages helper
     - Permission checking helper
     ```
 
-  - [ ] **app/Repositories/Contracts/BaseRepositoryInterface.php**
+  - [x] **app/Repositories/Contracts/BaseRepositoryInterface.php**
     ```php
     - Interface: all, find, create, update, delete, restore
     - Scope methods: byTenant, byStore, active
     ```
 
-  - [ ] **app/Services/BaseService.php**
+  - [x] **app/Services/BaseService.php**
     ```php
     - Abstract class with common business logic
     - Transaction handling
     - Event dispatching
     ```
 
-- [ ] **Models with Relationships**
-  - [ ] **Tenant.php**
+- [x] **Models with Relationships**
+  - [x] **Tenant.php**
     ```php
     - HasMany: stores, users, products, categories
     - SoftDeletes trait
@@ -295,7 +295,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Scopes: active, trial, subscribed
     ```
 
-  - [ ] **Store.php**
+  - [x] **Store.php**
     ```php
     - BelongsTo: tenant
     - HasMany: users, stocks, transactions, sessions
@@ -305,7 +305,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Accessors: fullAddress
     ```
 
-  - [ ] **User.php**
+  - [x] **User.php**
     ```php
     - BelongsTo: tenant, store
     - HasMany: transactions, activities, stockMovements
@@ -317,7 +317,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Scopes: active, byTenant, byStore
     ```
 
-  - [ ] **Category.php**
+  - [x] **Category.php**
     ```php
     - BelongsTo: tenant, parent (self)
     - HasMany: products, children (self)
@@ -325,7 +325,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Global scope: TenantScope
     ```
 
-  - [ ] **Product.php**
+  - [x] **Product.php**
     ```php
     - BelongsTo: tenant, category
     - HasMany: stocks, priceHistories, transactionItems
@@ -336,7 +336,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Methods: getStockByStore($storeId), getPriceByStore($storeId)
     ```
 
-  - [ ] **Stock.php**
+  - [x] **Stock.php**
     ```php
     - BelongsTo: product, store
     - HasMany: stockMovements
@@ -344,7 +344,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Scopes: lowStock, overstock
     ```
 
-  - [ ] **StockMovement.php**
+  - [x] **StockMovement.php**
     ```php
     - BelongsTo: product, store, createdBy (User)
     - MorphTo: reference (polymorphic)
