@@ -28,6 +28,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Track login data
+        $user = Auth::user();
+        $user->update([
+            'last_login_at' => now(),
+            'last_login_ip' => $request->ip(),
+            'last_login_device' => $request->userAgent(),
+            'login_count' => $user->login_count + 1,
+        ]);
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

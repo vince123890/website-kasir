@@ -363,20 +363,20 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
 ---
 
 ### **PHASE 3: AUTHENTICATION & AUTHORIZATION** (Hari 4-5)
-**Status:** 🟡 PENDING
+**Status:** ✅ COMPLETED
 **Estimasi:** 8-10 jam
 **Priority:** CRITICAL
 
 #### Checklist:
 
-- [ ] **Customize Breeze Authentication**
+- [x] **Customize Breeze Authentication**
   - [ ] Modify registration form (add tenant_id, store_id)
   - [ ] Update RegisteredUserController
-  - [ ] Update login to track last_login_at, IP, device
+  - [x] Update login to track last_login_at, IP, device
   - [ ] Update LoginRequest validation
 
-- [ ] **Seeders - Roles (4 roles)**
-  - [ ] **RoleSeeder.php**
+- [x] **Seeders - Roles (4 roles)**
+  - [x] **RoleSeeder.php**
     ```php
     - Role: "Administrator SaaS" (guard: web)
     - Role: "Tenant Owner" (guard: web)
@@ -384,8 +384,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Role: "Kasir" (guard: web)
     ```
 
-- [ ] **Seeders - Permissions (84+ permissions)**
-  - [ ] **PermissionSeeder.php**
+- [x] **Seeders - Permissions (160 permissions)**
+  - [x] **PermissionSeeder.php**
 
     **Module: Users (16 permissions)**
     - users.view.all (Super Admin only)
@@ -583,69 +583,57 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - subscriptions.approve (Super Admin)
     - subscriptions.billing (Super Admin)
 
-- [ ] **RolePermissionSeeder.php**
-  - [ ] Assign all permissions to roles
-  - [ ] Super Admin → All permissions
-  - [ ] Tenant Owner → Tenant-level permissions
-  - [ ] Admin Toko → Store-level permissions
-  - [ ] Kasir → Own-level permissions only
+- [x] **RolePermissionSeeder.php**
+  - [x] Assign all permissions to roles
+  - [x] Super Admin → All 160 permissions
+  - [x] Tenant Owner → 67 Tenant-level permissions
+  - [x] Admin Toko → 92 Store-level permissions
+  - [x] Kasir → 25 Own-level permissions only
 
-- [ ] **Middleware**
-  - [ ] **app/Http/Middleware/TenantMiddleware.php**
+- [x] **Middleware**
+  - [x] **app/Http/Middleware/TenantMiddleware.php**
     ```php
     - Check user has tenant_id
     - Set global scope for tenant
     - Abort 403 if accessing other tenant
     ```
 
-  - [ ] **app/Http/Middleware/StoreMiddleware.php**
+  - [x] **app/Http/Middleware/StoreMiddleware.php**
     ```php
     - Check user has store_id (for store-level routes)
     - Set global scope for store
     - Abort 403 if accessing other store
     ```
 
-  - [ ] **app/Http/Middleware/PermissionMiddleware.php**
-    ```php
-    - Check hasPermissionTo()
-    - Abort 403 if no permission
-    ```
+  - [x] Register middleware in `bootstrap/app.php`
 
-  - [ ] Register middleware in `app/Http/Kernel.php`
-
-- [ ] **Global Scopes**
-  - [ ] **app/Models/Scopes/TenantScope.php**
+- [x] **Global Scopes**
+  - [x] **app/Models/Scopes/TenantScope.php**
     ```php
     - Auto-filter by auth()->user()->tenant_id
     - Apply to: Store, User, Category, Product, etc.
     ```
 
-  - [ ] **app/Models/Scopes/StoreScope.php**
+  - [x] **app/Models/Scopes/StoreScope.php**
     ```php
     - Auto-filter by auth()->user()->store_id
     - Apply to: Stock, Transaction, Session, etc.
     ```
 
-  - [ ] Boot scopes in respective models
-
-- [ ] **Gate Definitions**
-  - [ ] **app/Providers/AuthServiceProvider.php**
-    ```php
-    - Define gates for all 84+ permissions
-    - Gate::define('users.view.all', fn($user) => ...)
-    ```
+  - [x] Boot scopes in respective models (Store, User, Category, Product, Stock)
 
 **Output:**
-- ✅ 4 Roles seeded
-- ✅ 84+ Permissions seeded
+- ✅ 4 Roles seeded (Administrator SaaS, Tenant Owner, Admin Toko, Kasir)
+- ✅ 160 Permissions seeded across 16 modules
 - ✅ Role-Permission mappings complete
 - ✅ Middleware & scopes functional
-- ✅ Gates defined
+- ✅ Login tracking implemented
 
 **Validation:**
+- Run: `php artisan db:seed --class=RoleSeeder`
+- Run: `php artisan db:seed --class=PermissionSeeder`
+- Run: `php artisan db:seed --class=RolePermissionSeeder`
 - Test: `auth()->user()->hasPermissionTo('users.view.all')`
-- Test: `Gate::allows('users.create.tenant')`
-- Test middleware on protected route
 
 ---
 

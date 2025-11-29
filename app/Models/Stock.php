@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\StoreScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Stock extends Model
 {
     use HasFactory;
+
+    /**
+     * Boot the model.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new StoreScope);
+    }
 
     protected $fillable = [
         'product_id',

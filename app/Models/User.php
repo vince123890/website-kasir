@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,6 +14,14 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes, HasRoles;
+
+    /**
+     * Boot the model.
+     */
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new TenantScope);
+    }
 
     protected $fillable = [
         'tenant_id',
