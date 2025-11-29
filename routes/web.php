@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -71,6 +72,17 @@ Route::middleware('auth')->group(function () {
         Route::resource('categories', CategoryController::class);
         Route::post('/categories/bulk-delete', [CategoryController::class, 'bulkDelete'])->name('categories.bulkDelete');
         Route::get('/categories/export', [CategoryController::class, 'export'])->name('categories.export');
+    });
+
+    // Products Management Routes (Tenant Owner & Admin Toko)
+    Route::middleware('role:Tenant Owner|Admin Toko')->group(function () {
+        Route::get('/products/export', [ProductController::class, 'export'])->name('products.export');
+        Route::get('/products/download-template', [ProductController::class, 'downloadTemplate'])->name('products.downloadTemplate');
+        Route::resource('products', ProductController::class);
+        Route::post('/products/bulk-import', [ProductController::class, 'bulkImport'])->name('products.bulkImport');
+        Route::post('/products/bulk-price-update', [ProductController::class, 'bulkPriceUpdate'])->name('products.bulkPriceUpdate');
+        Route::get('/products/{id}/price-history', [ProductController::class, 'priceHistory'])->name('products.priceHistory');
+        Route::post('/products/{id}/override-price', [ProductController::class, 'overrideStorePrice'])->name('products.overrideStorePrice');
     });
 });
 
