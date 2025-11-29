@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\StoreController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,6 +56,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
         Route::put('/{id}', [UserController::class, 'update'])->name('update');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
+    });
+
+    // Stores Management Routes (Tenant Owner & Admin Toko)
+    Route::middleware('role:Tenant Owner|Admin Toko')->group(function () {
+        Route::resource('stores', StoreController::class);
+        Route::get('/stores/{id}/settings', [StoreController::class, 'settings'])->name('stores.settings');
+        Route::put('/stores/{id}/settings', [StoreController::class, 'updateSettings'])->name('stores.updateSettings');
     });
 });
 

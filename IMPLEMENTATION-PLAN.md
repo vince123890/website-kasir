@@ -1504,13 +1504,13 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
 ---
 
 ### **PHASE 8: MODULE - STORES MANAGEMENT** (Hari 9-10)
-**Status:** 🟡 PENDING
+**Status:** ✅ COMPLETED
 **Estimasi:** 8-10 jam
 **Priority:** HIGH
 
 #### Checklist:
 
-- [ ] **Routes (web.php)**
+- [x] **Routes (web.php)**
   ```php
   Tenant Owner & Admin Toko:
   - GET /stores → index
@@ -1524,8 +1524,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
   - PUT /stores/{id}/settings → updateSettings
   ```
 
-- [ ] **StoreRepository**
-  - [ ] **app/Repositories/StoreRepository.php**
+- [x] **StoreRepository**
+  - [x] **app/Repositories/StoreRepository.php**
     ```php
     - getByTenant($tenantId, $perPage)
     - getWithStatistics($id)
@@ -1535,8 +1535,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - updateSettings($storeId, $settingsData)
     ```
 
-- [ ] **StoreService**
-  - [ ] **app/Services/StoreService.php**
+- [x] **StoreService**
+  - [x] **app/Services/StoreService.php**
     ```php
     - createStore($data)
       → Generate unique code
@@ -1558,8 +1558,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       → Validate tax settings
     ```
 
-- [ ] **StoreRequest**
-  - [ ] **app/Http/Requests/StoreRequest.php**
+- [x] **StoreRequest**
+  - [x] **app/Http/Requests/StoreRequest.php**
     ```php
     - name: required, string, max:255
     - code: required, unique per tenant
@@ -1571,8 +1571,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - logo_path: nullable, image, max:2MB
     ```
 
-- [ ] **StoreController**
-  - [ ] **app/Http/Controllers/StoreController.php**
+- [x] **StoreController**
+  - [x] **app/Http/Controllers/StoreController.php**
     ```php
     - index()
       → Get stores by tenant (auto-scoped)
@@ -1624,9 +1624,9 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       → Redirect
     ```
 
-- [ ] **Views**
+- [x] **Views**
 
-  - [ ] **resources/views/stores/index.blade.php**
+  - [x] **resources/views/stores/index.blade.php**
     ```blade
     - Page title: "Stores Management"
     - Search bar
@@ -1644,7 +1644,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Pagination
     ```
 
-  - [ ] **resources/views/stores/create.blade.php**
+  - [x] **resources/views/stores/create.blade.php**
     ```blade
     - Form fields:
       → Name (input)
@@ -1661,12 +1661,12 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Submit & Cancel
     ```
 
-  - [ ] **resources/views/stores/edit.blade.php**
+  - [x] **resources/views/stores/edit.blade.php**
     ```blade
     - Same as create but pre-filled
     ```
 
-  - [ ] **resources/views/stores/show.blade.php**
+  - [x] **resources/views/stores/show.blade.php**
     ```blade
     - Store Info Card:
       → Logo
@@ -1705,7 +1705,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       → View Inventory
     ```
 
-  - [ ] **resources/views/stores/settings.blade.php**
+  - [x] **resources/views/stores/settings.blade.php**
     ```blade
     - Tabs:
       1. General Settings
@@ -1742,9 +1742,9 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Save button
     ```
 
-- [ ] **Additional Features**
+- [x] **Additional Features**
 
-  - [ ] **Operating Hours UI**
+  - [x] **Operating Hours UI**
     ```blade
     - Table:
       | Day       | Open Time | Close Time | Closed |
@@ -1756,7 +1756,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Store as JSON in store_settings.operating_hours
     ```
 
-  - [ ] **Timezone Selector**
+  - [x] **Timezone Selector**
     ```php
     - Dropdown with all PHP timezones
     - Auto-detect from browser (JavaScript)
@@ -1764,7 +1764,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Display all times in store timezone
     ```
 
-  - [ ] **Tax Calculation Preview**
+  - [x] **Tax Calculation Preview**
     ```blade
     - Example:
       Product Price: Rp 100,000
@@ -1781,7 +1781,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       Price incl. tax: Rp 111,000
     ```
 
-  - [ ] **Rounding Preview**
+  - [x] **Rounding Preview**
     ```blade
     - Example:
       Subtotal: Rp 127,350
@@ -1792,7 +1792,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       Round to 1000: Rp 127,000
     ```
 
-  - [ ] **Logo Upload**
+  - [x] **Logo Upload**
     ```php
     - Validation: image, max:2MB, JPG/PNG
     - Store in: storage/app/public/stores/logos/
@@ -1801,7 +1801,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Used on receipts
     ```
 
-  - [ ] **Store Notification**
+  - [x] **Store Notification**
     ```php
     - On create: Email to assigned Admin Toko
     - Email template: "You've been assigned to [Store Name]"
