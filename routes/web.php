@@ -7,6 +7,7 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\PurchaseOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -91,6 +92,21 @@ Route::middleware('auth')->group(function () {
         Route::get('/suppliers/export', [SupplierController::class, 'export'])->name('suppliers.export');
         Route::resource('suppliers', SupplierController::class);
         Route::get('/suppliers/{id}/history', [SupplierController::class, 'purchaseHistory'])->name('suppliers.history');
+    });
+
+    // Purchase Orders Management Routes (Tenant Owner & Admin Toko)
+    Route::middleware('role:Tenant Owner|Admin Toko')->group(function () {
+        Route::get('/purchases', [PurchaseOrderController::class, 'index'])->name('purchases.index');
+        Route::get('/purchases/create', [PurchaseOrderController::class, 'create'])->name('purchases.create');
+        Route::post('/purchases', [PurchaseOrderController::class, 'store'])->name('purchases.store');
+        Route::get('/purchases/{id}', [PurchaseOrderController::class, 'show'])->name('purchases.show');
+        Route::get('/purchases/{id}/edit', [PurchaseOrderController::class, 'edit'])->name('purchases.edit');
+        Route::put('/purchases/{id}', [PurchaseOrderController::class, 'update'])->name('purchases.update');
+        Route::delete('/purchases/{id}', [PurchaseOrderController::class, 'destroy'])->name('purchases.destroy');
+        Route::post('/purchases/{id}/submit', [PurchaseOrderController::class, 'submit'])->name('purchases.submit');
+        Route::post('/purchases/{id}/approve', [PurchaseOrderController::class, 'approve'])->name('purchases.approve');
+        Route::post('/purchases/{id}/reject', [PurchaseOrderController::class, 'reject'])->name('purchases.reject');
+        Route::post('/purchases/{id}/receive', [PurchaseOrderController::class, 'receive'])->name('purchases.receive');
     });
 });
 
