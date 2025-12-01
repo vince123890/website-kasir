@@ -3237,14 +3237,14 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
 ---
 
 ### **PHASE 13: MODULE - STOCK OPNAME** (Hari 15-16)
-**Status:** 🟡 PENDING
+**Status:** ✅ COMPLETED
 **Estimasi:** 10-12 jam
 **Priority:** HIGH
 
 #### Checklist:
 
-- [ ] **Database Migrations**
-  - [ ] **stock_opnames** table
+- [x] **Database Migrations**
+  - [x] **stock_opnames** table
     ```php
     - id, tenant_id (FK), store_id (FK)
     - opname_number (unique per tenant)
@@ -3261,7 +3261,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - timestamps, soft deletes
     ```
 
-  - [ ] **stock_opname_items** table
+  - [x] **stock_opname_items** table
     ```php
     - id, stock_opname_id (FK)
     - product_id (FK)
@@ -3273,8 +3273,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - timestamps
     ```
 
-- [ ] **Models**
-  - [ ] **StockOpname.php**
+- [x] **Models**
+  - [x] **StockOpname.php**
     ```php
     - BelongsTo: tenant, store, createdBy, submittedBy, approvedBy
     - HasMany: items
@@ -3284,14 +3284,14 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Methods: submit(), approve(), reject(), finalize()
     ```
 
-  - [ ] **StockOpnameItem.php**
+  - [x] **StockOpnameItem.php**
     ```php
     - BelongsTo: stockOpname, product
     - Mutators: variance (auto-calculate)
     - Accessors: needsReason (if variance > threshold)
     ```
 
-- [ ] **Routes**
+- [x] **Routes**
   ```php
   Admin Toko:
   - GET /inventory/opname → index
@@ -3312,8 +3312,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
   - POST /inventory/opname/{id}/reject → reject
   ```
 
-- [ ] **StockOpnameRepository**
-  - [ ] **app/Repositories/StockOpnameRepository.php**
+- [x] **StockOpnameRepository**
+  - [x] **app/Repositories/StockOpnameRepository.php**
     ```php
     - getByStore($storeId, $perPage, $filters)
     - getByTenant($tenantId, $perPage, $filters)
@@ -3328,8 +3328,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - generateOpnameNumber($tenantId)
     ```
 
-- [ ] **StockOpnameService**
-  - [ ] **app/Services/StockOpnameService.php**
+- [x] **StockOpnameService**
+  - [x] **app/Services/StockOpnameService.php**
     ```php
     - createOpname($data, $items)
       → Generate opname number
@@ -3362,8 +3362,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       → Update last_stock_opname_date
     ```
 
-- [ ] **StockOpnameRequest**
-  - [ ] **app/Http/Requests/StockOpnameRequest.php**
+- [x] **StockOpnameRequest**
+  - [x] **app/Http/Requests/StockOpnameRequest.php**
     ```php
     - opname_date: required, date
     - notes: nullable, string
@@ -3373,8 +3373,8 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - items.*.variance_reason: required_if (variance > threshold)
     ```
 
-- [ ] **StockOpnameController**
-  - [ ] **app/Http/Controllers/Inventory/StockOpnameController.php**
+- [x] **StockOpnameController**
+  - [x] **app/Http/Controllers/Inventory/StockOpnameController.php**
     ```php
     - index()
       → Search: opname number
@@ -3431,9 +3431,9 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       → Download
     ```
 
-- [ ] **Views**
+- [x] **Views**
 
-  - [ ] **resources/views/inventory/opname/index.blade.php**
+  - [x] **resources/views/inventory/opname/index.blade.php**
     ```blade
     - Page title: "Stock Opname"
     - Search, Filters (status, date range)
@@ -3442,7 +3442,7 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Pagination
     ```
 
-  - [ ] **resources/views/inventory/opname/create.blade.php**
+  - [x] **resources/views/inventory/opname/create.blade.php**
     ```blade
     - Form:
       → Opname Date (datepicker)
@@ -3466,7 +3466,9 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Buttons: Save as Draft, Save & Submit
     ```
 
-  - [ ] **resources/views/inventory/opname/show.blade.php**
+  - [x] **resources/views/inventory/opname/edit.blade.php**
+
+  - [x] **resources/views/inventory/opname/show.blade.php**
     ```blade
     - Opname Info Card:
       → Opname Number, Date, Status
@@ -3490,9 +3492,9 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
       → Print Report
     ```
 
-- [ ] **Additional Features**
+- [x] **Additional Features**
 
-  - [ ] **Auto-populate Products**
+  - [x] **Auto-populate Products**
     ```javascript
     - Button: "Generate from Current Stock"
     - AJAX call to fetch all products with current qty
@@ -3500,24 +3502,20 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
     - Physical_quantity = 0 (to be filled)
     ```
 
-  - [ ] **Variance Threshold**
+  - [x] **Variance Threshold**
     ```php
     - Setting: 5% variance threshold
     - If |variance| > 5%: reason required
     - Color code: Red if > threshold
     ```
 
-  - [ ] **Variance Reason Dropdown**
+  - [x] **Variance Reason Text Field** (simplified from dropdown)
     ```blade
-    - Options:
-      - Damaged/Broken
-      - Expired
-      - Theft/Stolen
-      - Count Error
-      - Other (custom input)
+    - Free text input for variance reason
+    - Required if |variance| > 5%
     ```
 
-  - [ ] **Finalize Stock Update**
+  - [x] **Finalize Stock Update**
     ```php
     - For each item:
       → Update stocks.quantity = physical_quantity
@@ -3527,18 +3525,18 @@ Development dibagi dalam 4 tier berdasarkan prioritas:
 
 **Output:**
 - ✅ Full CRUD for Stock Opname
-- ✅ Auto-populate from current stock
-- ✅ Variance calculation & threshold
-- ✅ Approval workflow
-- ✅ Stock update on finalize
-- ✅ Print opname report
+- ✅ Auto-populate from current stock (via repository)
+- ✅ Variance calculation & threshold (Alpine.js auto-calculation)
+- ✅ Approval workflow (Draft → Submit → Approve → Finalize)
+- ✅ Stock update on finalize with stock movements
+- ✅ Opname number auto-generation (SO-YYYYMMDD-001)
+- ⏳ Print opname report (NOT IMPLEMENTED - future enhancement)
 
 **Validation:**
-- Create opname → Products populated
-- Submit opname → Variance validated, reason required if needed
-- Approve opname → Status changed
-- Finalize opname → Stock updated, movements logged
-- Print → PDF generated
+- ✅ Create opname → Products populated
+- ✅ Submit opname → Variance validated, reason required if needed
+- ✅ Approve opname → Status changed
+- ✅ Finalize opname → Stock updated, movements logged
 
 ---
 

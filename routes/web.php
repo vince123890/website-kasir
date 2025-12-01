@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\Inventory\StockOpnameController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -107,6 +108,21 @@ Route::middleware('auth')->group(function () {
         Route::post('/purchases/{id}/approve', [PurchaseOrderController::class, 'approve'])->name('purchases.approve');
         Route::post('/purchases/{id}/reject', [PurchaseOrderController::class, 'reject'])->name('purchases.reject');
         Route::post('/purchases/{id}/receive', [PurchaseOrderController::class, 'receive'])->name('purchases.receive');
+    });
+
+    // Stock Opname Management Routes (Tenant Owner & Admin Toko)
+    Route::middleware('role:Tenant Owner|Admin Toko')->prefix('inventory/opname')->name('inventory.opname.')->group(function () {
+        Route::get('/', [StockOpnameController::class, 'index'])->name('index');
+        Route::get('/create', [StockOpnameController::class, 'create'])->name('create');
+        Route::post('/', [StockOpnameController::class, 'store'])->name('store');
+        Route::get('/{id}', [StockOpnameController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [StockOpnameController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [StockOpnameController::class, 'update'])->name('update');
+        Route::delete('/{id}', [StockOpnameController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/submit', [StockOpnameController::class, 'submit'])->name('submit');
+        Route::post('/{id}/approve', [StockOpnameController::class, 'approve'])->name('approve');
+        Route::post('/{id}/reject', [StockOpnameController::class, 'reject'])->name('reject');
+        Route::post('/{id}/finalize', [StockOpnameController::class, 'finalize'])->name('finalize');
     });
 });
 
