@@ -9,6 +9,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\Inventory\StockOpnameController;
+use App\Http\Controllers\Inventory\StockAdjustmentController;
+use App\Http\Controllers\Inventory\UnpackingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -123,6 +125,36 @@ Route::middleware('auth')->group(function () {
         Route::post('/{id}/approve', [StockOpnameController::class, 'approve'])->name('approve');
         Route::post('/{id}/reject', [StockOpnameController::class, 'reject'])->name('reject');
         Route::post('/{id}/finalize', [StockOpnameController::class, 'finalize'])->name('finalize');
+    });
+
+    // Stock Adjustment Management Routes (Tenant Owner & Admin Toko)
+    Route::middleware('role:Tenant Owner|Admin Toko')->prefix('inventory/adjustments')->name('inventory.adjustments.')->group(function () {
+        Route::get('/', [StockAdjustmentController::class, 'index'])->name('index');
+        Route::get('/create', [StockAdjustmentController::class, 'create'])->name('create');
+        Route::post('/', [StockAdjustmentController::class, 'store'])->name('store');
+        Route::get('/{id}', [StockAdjustmentController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [StockAdjustmentController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [StockAdjustmentController::class, 'update'])->name('update');
+        Route::delete('/{id}', [StockAdjustmentController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/submit', [StockAdjustmentController::class, 'submit'])->name('submit');
+        Route::post('/{id}/approve', [StockAdjustmentController::class, 'approve'])->name('approve');
+        Route::post('/{id}/reject', [StockAdjustmentController::class, 'reject'])->name('reject');
+        Route::post('/{id}/apply', [StockAdjustmentController::class, 'apply'])->name('apply');
+    });
+
+    // Unpacking Management Routes (Tenant Owner & Admin Toko)
+    Route::middleware('role:Tenant Owner|Admin Toko')->prefix('inventory/unpacking')->name('inventory.unpacking.')->group(function () {
+        Route::get('/', [UnpackingController::class, 'index'])->name('index');
+        Route::get('/create', [UnpackingController::class, 'create'])->name('create');
+        Route::post('/', [UnpackingController::class, 'store'])->name('store');
+        Route::get('/{id}', [UnpackingController::class, 'show'])->name('show');
+        Route::get('/{id}/edit', [UnpackingController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [UnpackingController::class, 'update'])->name('update');
+        Route::delete('/{id}', [UnpackingController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/submit', [UnpackingController::class, 'submit'])->name('submit');
+        Route::post('/{id}/approve', [UnpackingController::class, 'approve'])->name('approve');
+        Route::post('/{id}/reject', [UnpackingController::class, 'reject'])->name('reject');
+        Route::post('/{id}/process', [UnpackingController::class, 'process'])->name('process');
     });
 });
 
