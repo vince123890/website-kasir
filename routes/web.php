@@ -16,6 +16,7 @@ use App\Http\Controllers\POSController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,8 +28,14 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    // Profile Management Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.updateAvatar');
+    Route::get('/profile/activity-log', [ProfileController::class, 'activityLog'])->name('profile.activityLog');
+    Route::get('/profile/login-history', [ProfileController::class, 'loginHistory'])->name('profile.loginHistory');
+    Route::post('/profile/logout-all-sessions', [ProfileController::class, 'logoutAllSessions'])->name('profile.logoutAllSessions');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Users Management Routes
@@ -57,6 +64,20 @@ Route::middleware('auth')->group(function () {
         Route::post('/tenants/{id}/restore', [TenantController::class, 'restore'])->name('tenants.restore');
         Route::post('/tenants/{id}/activate', [TenantController::class, 'activate'])->name('tenants.activate');
         Route::post('/tenants/{id}/deactivate', [TenantController::class, 'deactivate'])->name('tenants.deactivate');
+
+        // System Settings
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+        Route::post('/settings/general', [SettingsController::class, 'updateGeneral'])->name('settings.updateGeneral');
+        Route::post('/settings/email', [SettingsController::class, 'updateEmail'])->name('settings.updateEmail');
+        Route::post('/settings/email/test', [SettingsController::class, 'testEmail'])->name('settings.testEmail');
+        Route::post('/settings/notifications', [SettingsController::class, 'updateNotifications'])->name('settings.updateNotifications');
+        Route::post('/settings/security', [SettingsController::class, 'updateSecurity'])->name('settings.updateSecurity');
+        Route::post('/settings/backups', [SettingsController::class, 'updateBackups'])->name('settings.updateBackups');
+        Route::post('/settings/backups/create', [SettingsController::class, 'createBackup'])->name('settings.createBackup');
+        Route::get('/settings/backups/history', [SettingsController::class, 'backupHistory'])->name('settings.backupHistory');
+        Route::post('/settings/backups/download', [SettingsController::class, 'downloadBackup'])->name('settings.downloadBackup');
+        Route::delete('/settings/backups/delete', [SettingsController::class, 'deleteBackup'])->name('settings.deleteBackup');
+        Route::post('/settings/initialize-defaults', [SettingsController::class, 'initializeDefaults'])->name('settings.initializeDefaults');
     });
 
     // Staff Routes (Admin Toko)
