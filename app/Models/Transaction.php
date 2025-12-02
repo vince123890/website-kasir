@@ -17,6 +17,7 @@ class Transaction extends Model
         'store_id',
         'store_session_id',
         'cashier_id',
+        'customer_id',
         'transaction_number',
         'transaction_date',
         'customer_name',
@@ -83,6 +84,11 @@ class Transaction extends Model
     public function voidedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'voided_by');
+    }
+
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
     }
 
     public function items(): HasMany
