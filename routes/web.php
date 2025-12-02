@@ -14,15 +14,17 @@ use App\Http\Controllers\Inventory\UnpackingController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\POSController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -195,6 +197,16 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', [CustomerController::class, 'update'])->name('update');
         Route::delete('/{id}', [CustomerController::class, 'destroy'])->name('destroy');
         Route::get('/{id}/history', [CustomerController::class, 'transactionHistory'])->name('history');
+    });
+
+    // Reports & Analytics Routes (All Roles - permission-based)
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::get('/sales', [ReportController::class, 'salesReport'])->name('sales');
+        Route::get('/inventory', [ReportController::class, 'inventoryReport'])->name('inventory');
+        Route::get('/financial', [ReportController::class, 'financialReport'])->name('financial')->middleware('role:Tenant Owner');
+        Route::get('/cashier', [ReportController::class, 'cashierReport'])->name('cashier');
+        Route::post('/export', [ReportController::class, 'export'])->name('export');
     });
 });
 
