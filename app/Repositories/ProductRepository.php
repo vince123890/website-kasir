@@ -459,4 +459,90 @@ class ProductRepository
             ->where('store_id', $storeId)
             ->first();
     }
+
+    /**
+     * Get available products for store with stock information
+     */
+    public function getAvailableForStore(int $storeId): Collection
+    {
+        return Product::whereHas('stocks', function ($query) use ($storeId) {
+            $query->where('store_id', $storeId)
+                ->where('quantity', '>', 0);
+        })
+        ->where('is_active', true)
+        ->with(['category', 'stocks' => function ($query) use ($storeId) {
+            $query->where('store_id', $storeId);
+        }])
+        ->orderBy('name')
+        ->get();
+    }
+
+    /**
+     * Search products for store
+     */
+    public function searchForStore(string $search, int $storeId, int $limit = 10): Collection
+    {
+        return Product::where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+                ->orWhere('sku', 'like', "%{$search}%")
+                ->orWhere('barcode', 'like', "%{$search}%");
+        })
+        ->whereHas('stocks', function ($query) use ($storeId) {
+            $query->where('store_id', $storeId);
+        })
+        ->where('is_active', true)
+        ->with(['category', 'stocks' => function ($query) use ($storeId) {
+            $query->where('store_id', $storeId);
+        }])
+        ->limit($limit)
+        ->get();
+    }
+
+    /**
+     * Get available stock for product in store
+     */
+    public function getAvailableStock(int $productId, int $storeId): float
+    {
+        $stock = ProductStock::where('product_id', $productId)
+            ->where('store_id', $storeId)
+            ->first();
+
+        return $stock ? $stock->quantity : 0;
+    }
+
+    /**
+     * Reduce stock for a product in a store
+     */
+    public function reduceStock(int $productId, int $storeId, float $quantity): void
+    {
+        $stock = ProductStock::where('product_id', $productId)
+            ->where('store_id', $storeId)
+            ->first();
+
+        if ($stock) {
+            $stock->decrement('quantity', $quantity);
+        }
+    }
+
+    /**
+     * Increase stock for a product in a store
+     */
+    public function increaseStock(int $productId, int $storeId, float $quantity): void
+    {
+        $stock = ProductStock::where('product_id', $productId)
+            ->where('store_id', $storeId)
+            ->first();
+
+        if ($stock) {
+            $stock->increment('quantity', $quantity);
+        }
+    }
+
+    /**
+     * Find product by ID
+     */
+    public function findById(int $id): ?Product
+    {
+        return Product::find($id);
+    }
 }

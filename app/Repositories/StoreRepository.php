@@ -78,6 +78,14 @@ class StoreRepository
     }
 
     /**
+     * Get all stores for tenant
+     */
+    public function getAll(): Collection
+    {
+        return Store::with('tenant')->orderBy('name')->get();
+    }
+
+    /**
      * Create a new store
      */
     public function create(array $data): Store

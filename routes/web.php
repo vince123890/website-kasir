@@ -11,6 +11,8 @@ use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\Inventory\StockOpnameController;
 use App\Http\Controllers\Inventory\StockAdjustmentController;
 use App\Http\Controllers\Inventory\UnpackingController;
+use App\Http\Controllers\SessionController;
+use App\Http\Controllers\POSController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -155,6 +157,30 @@ Route::middleware('auth')->group(function () {
         Route::post('/{id}/approve', [UnpackingController::class, 'approve'])->name('approve');
         Route::post('/{id}/reject', [UnpackingController::class, 'reject'])->name('reject');
         Route::post('/{id}/process', [UnpackingController::class, 'process'])->name('process');
+    });
+
+    // Store Sessions Management Routes (Kasir, Admin Toko, Tenant Owner)
+    Route::middleware('role:Kasir|Admin Toko|Tenant Owner')->prefix('sessions')->name('sessions.')->group(function () {
+        Route::get('/', [SessionController::class, 'index'])->name('index');
+        Route::get('/create', [SessionController::class, 'create'])->name('create');
+        Route::post('/', [SessionController::class, 'store'])->name('store');
+        Route::get('/{id}', [SessionController::class, 'show'])->name('show');
+        Route::get('/{id}/close', [SessionController::class, 'closeForm'])->name('closeForm');
+        Route::post('/{id}/close', [SessionController::class, 'close'])->name('close');
+        Route::post('/{id}/approve', [SessionController::class, 'approve'])->name('approve')->middleware('role:Admin Toko|Tenant Owner');
+        Route::get('/pending-approvals', [SessionController::class, 'pendingApprovals'])->name('pendingApprovals')->middleware('role:Admin Toko|Tenant Owner');
+    });
+
+    // POS Transactions Routes (Kasir, Admin Toko, Tenant Owner)
+    Route::middleware('role:Kasir|Admin Toko|Tenant Owner')->prefix('pos')->name('pos.')->group(function () {
+        Route::get('/', [POSController::class, 'index'])->name('index');
+        Route::post('/transactions', [POSController::class, 'store'])->name('store');
+        Route::post('/hold', [POSController::class, 'hold'])->name('hold');
+        Route::get('/resume/{id}', [POSController::class, 'resume'])->name('resume');
+        Route::delete('/pending/{id}', [POSController::class, 'deletePending'])->name('deletePending');
+        Route::post('/void/{id}', [POSController::class, 'void'])->name('void')->middleware('role:Admin Toko|Tenant Owner');
+        Route::get('/receipt/{id}', [POSController::class, 'receipt'])->name('receipt');
+        Route::get('/search-product', [POSController::class, 'searchProduct'])->name('searchProduct');
     });
 });
 
